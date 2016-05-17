@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d25170d3-dc38-4395-bd43-507a8e99bf37}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>manage.py</StartupFile>
+    <SearchPath>C:\git\censusreporter\censusreporter;C:\git\censusreporter\censusreporter\apps</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{5F0BE9CA-D677-4A4D-8806-6076C0FAAD37};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Django launcher</LaunchProvider>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <PythonRunWebServerCommandArguments>runserver --settings censusreporter.config.dev.settings %SERVER_PORT% $(CommandLineArguments)</PythonRunWebServerCommandArguments>
+    <PythonDebugWebServerCommandArguments>runserver --noreload --settings censusreporter.config.dev.settings %SERVER_PORT% $(CommandLineArguments)</PythonDebugWebServerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="censusreporter\apps\census\static\css\app.css" />
+    <Content Include="censusreporter\apps\census\static\css\charts.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\Grid.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\leaflet.label.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\normalize.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\normalize.min.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\select2\select2.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\select2\select2.png" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\select2\select2.textinput.css" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\select2\select2x2.png" />
+    <Content Include="censusreporter\apps\census\static\css\vendor\select2\spinner.gif" />
+    <Content Include="censusreporter\apps\census\static\embed.html" />
+    <Content Include="censusreporter\apps\census\static\iframe.html" />
+    <Content Include="censusreporter\apps\census\static\iframe_distribution_chart.html" />
+    <Content Include="censusreporter\apps\census\static\img\examples\education_cleveland.png" />
+    <Content Include="censusreporter\apps\census\static\img\examples\language_los_angeles.png" />
+    <Content Include="censusreporter\apps\census\static\img\examples\poverty_spokane.png" />
+    <Content Include="censusreporter\apps\census\static\img\examples\us_geographic_mobility_distribution.png" />
+    <Content Include="censusreporter\apps\census\static\img\examples\us_median_income_map.png" />
+    <Content Include="censusreporter\apps\census\static\img\examples\us_race_table.png" />
+    <Content Include="censusreporter\apps\census\static\img\icons\favicon.ico" />
+    <Content Include="censusreporter\apps\census\static\img\icons\touch-icon-144x144.png" />
+    <Content Include="censusreporter\apps\census\static\img\logo-48x24.png" />
+    <Content Include="censusreporter\apps\census\static\img\logo-embed.png" />
+    <Content Include="censusreporter\apps\census\static\img\logo.png" />
+    <Content Include="censusreporter\apps\census\static\img\logo12.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\age-sex.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\ancestry.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\citizenship.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\commuting.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\disability.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\education.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\employment.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\fertility.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\health-insurance.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\housing-fuel.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\income.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\industry.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\language.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\marriage.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\migration.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\mortgage.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\occupation.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\place-of-birth.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\property-value.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\public-assistance.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\race.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\relationship.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\same-sex.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\seniors.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\tenure.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\va_rating.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\veteran.png" />
+    <Content Include="censusreporter\apps\census\static\img\questions\veteran_period.png" />
+    <Content Include="censusreporter\apps\census\static\js\address.search.js" />
+    <Content Include="censusreporter\apps\census\static\js\app.js" />
+    <Content Include="censusreporter\apps\census\static\js\charts.js" />
+    <Content Include="censusreporter\apps\census\static\js\comparisons.js" />
+    <Content Include="censusreporter\apps\census\static\js\cr-leaflet.js" />
+    <Content Include="censusreporter\apps\census\static\js\data.query.builder.js" />
+    <Content Include="censusreporter\apps\census\static\js\embed.chart.frame.js" />
+    <Content Include="censusreporter\apps\census\static\js\embed.chart.make.js" />
+    <Content Include="censusreporter\apps\census\static\js\glossary.js" />
+    <Content Include="censusreporter\apps\census\static\js\profile.topic.picker.js" />
+    <Content Include="censusreporter\apps\census\static\js\table.detail.js" />
+    <Content Include="censusreporter\apps\census\static\js\tilelayer.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\chroma.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\chroma.min.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\classList.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\classList.min.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\flippant.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\flippant.min.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\Grid.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\leaflet.label.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\r2d3.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\select2.js" />
+    <Content Include="censusreporter\apps\census\static\js\vendor\select2.min.js" />
+    <Content Include="censusreporter\apps\census\static\js\widget.geo.select.js" />
+    <Content Include="censusreporter\apps\census\static\js\widget.uservoice.js" />
+    <Content Include="censusreporter\apps\census\static\tilelayer.html" />
+    <Content Include="censusreporter\apps\census\templates\404.html" />
+    <Content Include="censusreporter\apps\census\templates\500.html" />
+    <Content Include="censusreporter\apps\census\templates\data\data_builder.html" />
+    <Content Include="censusreporter\apps\census\templates\data\data_distribution.html" />
+    <Content Include="censusreporter\apps\census\templates\data\data_map.html" />
+    <Content Include="censusreporter\apps\census\templates\data\data_table.html" />
+    <Content Include="censusreporter\apps\census\templates\data\_base_data.html" />
+    <Content Include="censusreporter\apps\census\templates\data\_blocks\_data_query_builder.html" />
+    <Content Include="censusreporter\apps\census\templates\data\_blocks\_toggle_menu.html" />
+    <Content Include="censusreporter\apps\census\templates\data\_blocks\_topic_select_input.html" />
+    <Content Include="censusreporter\apps\census\templates\examples\embed_charts.html" />
+    <Content Include="censusreporter\apps\census\templates\examples\_base_examples.html" />
+    <Content Include="censusreporter\apps\census\templates\glossary.html" />
+    <Content Include="censusreporter\apps\census\templates\healthcheck.html" />
+    <Content Include="censusreporter\apps\census\templates\homepage.html" />
+    <Content Include="censusreporter\apps\census\templates\locate\locate.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\profile_detail.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\profile_search.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\_base_profile.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\_blocks\_comparative_list_item.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\_blocks\_header_extra_links.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\_blocks\_stat_list.html" />
+    <Content Include="censusreporter\apps\census\templates\search\elasticsearch.html" />
+    <Content Include="censusreporter\apps\census\templates\search\geo_search.html" />
+    <Content Include="censusreporter\apps\census\templates\search\table_search.html" />
+    <Content Include="censusreporter\apps\census\templates\table\specific\B02003.html" />
+    <Content Include="censusreporter\apps\census\templates\table\specific\_base_specific.html" />
+    <Content Include="censusreporter\apps\census\templates\table\table_detail.html" />
+    <Content Include="censusreporter\apps\census\templates\table\table_search.html" />
+    <Content Include="censusreporter\apps\census\templates\table\_base_table.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\about_census.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\age_sex.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\children.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\commute.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\employment.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\families.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\geography.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\getting_started.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\health-insurance.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\income.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\migration.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\poverty.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\public-assistance.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\race_hispanic.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\same-sex.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\seniors.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\table-codes.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\topics_list.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\veterans.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\_base_topics.html" />
+    <Content Include="censusreporter\apps\census\templates\topics\_question_aside.html" />
+    <Content Include="censusreporter\apps\census\templates\_base.html" />
+    <Content Include="requirements.txt" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="censusreporter\apps\census\admin.py" />
+    <Compile Include="censusreporter\apps\census\context_processors.py" />
+    <Compile Include="censusreporter\apps\census\management\commands\cache_to_s3.py" />
+    <Compile Include="censusreporter\apps\census\management\commands\fcgi.py" />
+    <Compile Include="censusreporter\apps\census\management\commands\taxonify_table_metadata.py" />
+    <Compile Include="censusreporter\apps\census\management\commands\__init__.py" />
+    <Compile Include="censusreporter\apps\census\management\__init__.py" />
+    <Compile Include="censusreporter\apps\census\models.py" />
+    <Compile Include="censusreporter\apps\census\profile.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\comparatives.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\madlibs.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\partition.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\sumlevs.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\tabletags.py" />
+    <Compile Include="censusreporter\apps\census\templatetags\__init__.py" />
+    <Compile Include="censusreporter\apps\census\tests.py" />
+    <Compile Include="censusreporter\apps\census\topics.py" />
+    <Compile Include="censusreporter\apps\census\urls.py" />
+    <Compile Include="censusreporter\apps\census\utils.py" />
+    <Compile Include="censusreporter\apps\census\views.py" />
+    <Compile Include="censusreporter\apps\census\__init__.py" />
+    <Compile Include="censusreporter\apps\__init__.py" />
+    <Compile Include="censusreporter\bin\import_geographies.py" />
+    <Compile Include="censusreporter\bin\import_tables.py" />
+    <Compile Include="censusreporter\bin\__init__.py" />
+    <Compile Include="censusreporter\config\base\settings.py" />
+    <Compile Include="censusreporter\config\base\urls.py" />
+    <Compile Include="censusreporter\config\base\__init__.py" />
+    <Compile Include="censusreporter\config\dev\settings.py" />
+    <Compile Include="censusreporter\config\dev\urls.py" />
+    <Compile Include="censusreporter\config\dev\wsgi.py" />
+    <Compile Include="censusreporter\config\dev\__init__.py" />
+    <Compile Include="censusreporter\config\prod\settings.py" />
+    <Compile Include="censusreporter\config\prod\urls.py" />
+    <Compile Include="censusreporter\config\prod\wsgi.py" />
+    <Compile Include="censusreporter\config\prod\__init__.py" />
+    <Compile Include="censusreporter\config\__init__.py" />
+    <Compile Include="censusreporter\__init__.py" />
+    <Compile Include="fabfile.py" />
+    <Compile Include="manage.py" />
+    <Compile Include="wfastcgi.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="censusreporter" />
+    <Folder Include="censusreporter\apps" />
+    <Folder Include="censusreporter\apps\census" />
+    <Folder Include="censusreporter\apps\census\management" />
+    <Folder Include="censusreporter\apps\census\management\commands" />
+    <Folder Include="censusreporter\apps\census\static" />
+    <Folder Include="censusreporter\apps\census\static\css" />
+    <Folder Include="censusreporter\apps\census\static\css\vendor" />
+    <Folder Include="censusreporter\apps\census\static\css\vendor\select2" />
+    <Folder Include="censusreporter\apps\census\static\img" />
+    <Folder Include="censusreporter\apps\census\static\img\examples" />
+    <Folder Include="censusreporter\apps\census\static\img\icons" />
+    <Folder Include="censusreporter\apps\census\static\img\questions" />
+    <Folder Include="censusreporter\apps\census\static\js" />
+    <Folder Include="censusreporter\apps\census\static\js\vendor" />
+    <Folder Include="censusreporter\apps\census\templates" />
+    <Folder Include="censusreporter\apps\census\templates\data" />
+    <Folder Include="censusreporter\apps\census\templates\data\_blocks" />
+    <Folder Include="censusreporter\apps\census\templates\examples" />
+    <Folder Include="censusreporter\apps\census\templates\locate" />
+    <Folder Include="censusreporter\apps\census\templates\profile" />
+    <Folder Include="censusreporter\apps\census\templates\profile\_blocks" />
+    <Folder Include="censusreporter\apps\census\templates\search" />
+    <Folder Include="censusreporter\apps\census\templates\table" />
+    <Folder Include="censusreporter\apps\census\templates\table\specific" />
+    <Folder Include="censusreporter\apps\census\templates\topics" />
+    <Folder Include="censusreporter\apps\census\templatetags" />
+    <Folder Include="censusreporter\bin" />
+    <Folder Include="censusreporter\config" />
+    <Folder Include="censusreporter\config\base" />
+    <Folder Include="censusreporter\config\dev" />
+    <Folder Include="censusreporter\config\prod" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2695/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>True</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
