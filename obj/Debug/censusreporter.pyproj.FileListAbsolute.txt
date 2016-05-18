@@ -10,3 +10,15 @@ C:\git\censusreporter\bin\Microsoft.PythonTools.AzureSetup.exe
 C:\git\censusreporter\bin\Microsoft.PythonTools.AzureSetup.exe.config
 C:\git\censusreporter\bin\wfastcgi.py
 C:\git\censusreporter\obj\Debug\web.debug.config
+C:\git\cr\bin\Microsoft.PythonTools.WebRole.dll
+C:\git\cr\obj\Debug\attach_server.py
+C:\git\cr\obj\Debug\visualstudio_py_debugger.py
+C:\git\cr\obj\Debug\visualstudio_py_repl.py
+C:\git\cr\obj\Debug\visualstudio_py_util.py
+C:\git\cr\obj\Debug\__init__.py
+C:\git\cr\obj\Debug\__main__.py
+C:\git\cr\bin\AzureSetup.cfg
+C:\git\cr\bin\Microsoft.PythonTools.AzureSetup.exe
+C:\git\cr\bin\Microsoft.PythonTools.AzureSetup.exe.config
+C:\git\cr\bin\wfastcgi.py
+C:\git\cr\obj\Debug\web.debug.config

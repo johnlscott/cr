@@ -1,0 +1,262 @@
+{% extends '_base_iframe.html' %}{% load humanize madlibs %}
+
+{% block content %}
+
+<article id="demographics" class="clearfix">
+
+    <div class="section-container">
+
+        <section class="clearfix stat-row">
+            <h2 class="header-for-columns"><a class="permalink" href="#age" id="age">Age <i class="fa fa-link"></i></a>
+            </h2>
+            <aside></aside>
+            <div class="column-quarter">
+                {% include 'profile/_blocks/_stat_list.html' with stat=demographics.age.median_age.total stat_type='number' %}
+            </div>
+            <div class="column-half" id="chart-histogram-demographics-age-distribution_by_decade-total" data-stat-type="scaled-percentage" data-chart-title="Population by age range"></div>
+            <div class="column-quarter" id="chart-pie-demographics-age-distribution_by_category" data-stat-type="percentage" data-chart-title="Population by age category" data-initial-sort="-value"></div>
+        </section>
+
+    </div>
+
+    <div class="section-container">
+
+        <section class="clearfix stat-row">
+            <h2><a class="permalink" href="#commute" id="commute">Transportation to work <i class="fa fa-link"></i></a>
+            </h2>
+            <aside>
+            </aside>
+            <div class="column-third">
+                {% include 'profile/_blocks/_stat_list.html' with stat=economics.employment.mean_travel_time stat_type='time' stat_suffix='minutes' %}
+            </div>
+            <div class="column-two-thirds" id="chart-histogram-economics-employment-transportation_distribution" data-chart-title="Means of transportation to work" data-stat-type="scaled-percentage" data-qualifier="Universe: {{ economics.employment.transportation_distribution.metadata.universe }}"></div>
+        </section>
+
+    </div>
+
+    <div class="section-container">
+
+        <section class="clearfix stat-row">
+            <h2><a class="permalink" href="#housing-occupancy" id="housing-occupancy">Units &amp; Occupancy <i class="fa fa-link"></i></a>
+            </h2>
+            <aside>
+            </aside>
+            <div class="column-third">
+                {% include 'profile/_blocks/_stat_list.html' with stat=housing.units.number stat_type='count' %}
+            </div>
+            <div class="column-third" id="chart-pie-housing-units-occupancy_distribution" data-stat-type="percentage" data-chart-title="Occupied vs. Vacant" data-initial-sort="-value"></div>
+            <div class="column-third" id="chart-pie-housing-ownership-distribution" data-stat-type="percentage" data-chart-title="Ownership of occupied units" data-initial-sort="-value"></div>
+        </section>
+        <section class="clearfix stat-row grouped-row">
+            <div class="column-third" id="chart-pie-housing-units-structure_distribution" data-stat-type="percentage" data-chart-title="Types of structure" data-initial-sort="-value"></div>
+            <div class="column-two-thirds" id="chart-histogram-housing-length_of_tenure" data-stat-type="scaled-percentage" data-chart-title="Year moved in, by percentage of population"></div>
+        </section>
+
+        <section class="clearfix stat-row">
+            <h2><a class="permalink" href="#geographical-mobility" id="geographical-mobility">Geographical mobility <i class="fa fa-link"></i></a>
+            </h2>
+            <aside>
+            </aside>
+            <div class="column-third">
+                {% include 'profile/_blocks/_stat_list.html' with stat=housing.migration.moved_since_previous_year stat_type='percentage' %}
+            </div>
+            <div class="column-two-thirds" id="chart-histogram-housing-migration_distribution" data-stat-type="scaled-percentage" data-chart-title="Population migration since previous year"></div>
+        </section>
+
+    </div>
+
+    <div class="section-container">
+
+        <section class="clearfix stat-row">
+            <h2><a class="permalink" href="#veteran-status" id="veteran-status">Veteran status <i class="fa fa-link"></i></a>
+            </h2>
+            <aside>
+            </aside>
+            <div class="column-quarter">
+                {% include 'profile/_blocks/_stat_list.html' with stat=social.veterans.percentage stat_type='percentage' %}
+            </div>
+            <div class="column-half" id="chart-column-social-veterans-wartime_service" data-stat-type="number" data-chart-title="Veterans by wartime service" data-qualifier="Civilian veterans who served during wartime only"></div>
+            <div class="column-quarter">
+                <a class="stat number">
+                    {% include 'profile/_blocks/_stat_list.html' with stat=social.veterans.number stat_type='number' stat_class='secondary' stat_wrapper="false" %}
+                    {% include 'profile/_blocks/_stat_list.html' with stat=social.veterans.sex.male stat_type='number' stat_class='secondary' stat_wrapper="false" %}
+                    {% include 'profile/_blocks/_stat_list.html' with stat=social.veterans.sex.female stat_type='number' stat_class='secondary' stat_wrapper="false" %}
+                </a>
+            </div>
+        </section>
+        <p class="">Interact with charts and statistics for <span class="glossary-term" data-keyword="margin-of-error">margins of error</span> and additional information.
+        </p>
+    </div>
+
+</article>
+
+{% endblock %}
+
+{% block body_javascript_extra %}{{ block.super }}
+<script src="{{ STATIC_URL }}js/charts.js"></script>
+<script type="text/javascript">
+// Allow Ajax POST requests to bypass Django's CSRF check
+// https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+var csrftoken = '{{ csrf_token }}';
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+
+// Create all the charts
+var Charts = {},
+    chartContainers = $('[id^=chart-]'),
+    defaultDataRelease = '{{ geography.census_release }}',
+    releases = [defaultDataRelease],
+    profileData = {{ profile_data_json }};
+
+var gracefulType = function(chartType) {
+    // convert certain chart types to more readable versions at narrow widths
+    if (browserWidth <= 640) {
+        if (chartType == 'column' || chartType == 'histogram') {
+            return 'bar'
+        } else if (chartType == 'grouped_column') {
+            return 'grouped_bar'
+        }
+    }
+    return chartType
+}
+
+var makeCharts = function() {
+    $.each(chartContainers, function(i, obj) {
+        $(obj).empty();
+        var chartID = $(this).prop('id'),
+            chartDataKey = chartID.replace('chart-','').replace('alt-',''),
+            chartDataID = chartDataKey.split('-'),
+            chartType = gracefulType(chartDataID[0]),
+            chartData = profileData[chartDataID[1]],
+            chartChartTitle = $(this).data('chart-title'),
+            chartChartShowYAxis = $(this).data('chart-show-y-axis'),
+            chartInitialSort = $(this).data('initial-sort'),
+            chartStatType = $(this).data('stat-type'),
+            chartQualifier = $(this).data('qualifier') || null,
+            geographyData = profileData['geography'];
+
+        // allow arbitrary nesting in API data structure
+        var drilldown = chartDataID.length - 1;
+        if (drilldown >= 2) {
+            for (var n = 2; n <= drilldown; n++) {
+                chartData = chartData[chartDataID[n]]
+            }
+        }
+
+        // determine whether data point is from anything other
+        // than the primary ACS release for this page
+        for (var key in chartData) if (chartData.hasOwnProperty(key)) break;
+        var thisRelease = chartData[key]['acs_release'],
+            noteRelease = (thisRelease != defaultDataRelease) ? thisRelease + ' data' : null;
+
+        chartQualifier = Array(chartQualifier, noteRelease)
+                .filter(function(n) { return n }).join('; ');
+
+        var chartstuff = {
+            chartContainer: chartID,
+            chartDataKey: chartDataKey,
+            chartType: chartType,
+            chartHeight: 160,
+            chartData: chartData,
+            chartQualifier: chartQualifier,
+            chartChartTitle: chartChartTitle,
+            chartInitialSort: chartInitialSort,
+            chartStatType: chartStatType,
+            geographyData: geographyData
+        }
+        try {
+            Charts[i] = Chart(chartstuff);
+        } catch(e) {
+            console.log("Error making chart " + chartID)
+            console.log(chartstuff);
+        }
+
+    });
+}
+makeCharts();
+
+// listen for resize, redraw charts to new dimensions
+var lazyRedrawCharts = _.debounce(function() {
+    window.browserWidth = document.documentElement.clientWidth;
+    window.browserHeight = document.documentElement.clientHeight;
+    makeCharts();
+}, 50);
+$(window).resize(lazyRedrawCharts);
+
+
+// Enable the single-table topic picker
+var thisSumlev = '{{ geography.this.sumlevel }}',
+    thisGeoShortName = '{{ geography.this.short_name }}',
+    thisGeoID = '{{ geography.this.full_geoid }}',
+    placeGeoID = '{{ geography.parents.place.full_geoid }}',
+    CBSAGeoID = '{{ geography.parents.CBSA.full_geoid }}',
+    countyGeoID = '{{ geography.parents.county.full_geoid }}',
+    stateGeoID = '{{ geography.parents.state.full_geoid }}',
+    nationGeoID = '{{ geography.parents.nation.full_geoid }}';
+
+// Update the header's list of parent geographies
+var parentLinkContainer = $('#header-box .caption'),
+    parentLinksPrefix = '<span class="glossary-term">{{ geography.this.sumlevel_name|capfirst }}</span> in: ',
+    parentGeoAPI = CR_API_URL + '/1.0/geo/tiger2014/' + thisGeoID + '/parents',
+    tilesGeoAPI = 'http://embed.censusreporter.org/1.0/geo/tiger2014/tiles/' + thisSumlev + '/{z}/{x}/{y}.geojson';
+
+// for touch devices, still allow context toggle
+$('.stat-row').on('click', '.stat', function() {
+    $(this).find('.context').toggle();
+})
+
+if (!!parentLinkContainer) {
+    // set up the listener for trigger to reveal hidden groups
+    $('#header-box').on('click', '.link-reveal', function() {
+        $(this).hide().next('.hidden').show();
+        return false;
+    });
+
+    // hit the /parents API endpoint
+    $.getJSON(parentGeoAPI)
+        .done(function(results) {
+            // filter out 'this' from the parents
+            var parents = _.reject(results['parents'], function(p) {
+                return p.relation === 'this';
+            });
+            // list of unique parent sumlev types, maintaining order
+            var parentRelations = _.uniq(_.pluck(parents, 'sumlevel'));
+            // collect parents into individual sumlev groups
+            var parentGroups = _.groupBy(parents, function(d) {
+                return d.sumlevel;
+            });
+            // for each parent sumlev type ...
+            var parentLinkSets = _.map(parentRelations, function(r) {
+                // ... compile a set of links to individual profile pages
+                var parentLinkSet = _.map(parentGroups[r], function(v, k) {
+                    return '<a href="/profiles/' + v.geoid + '-' + slugify(v.display_name) + '/">' + v.display_name + '</a>';
+                });
+                var numParents = parentLinkSet.length;
+                // if more than one of a sumlev type, group behind reveal link
+                if (numParents > 1) {
+                    return '<a href="#" class="link-reveal">'+numParents+' '+ sumlevMap[r]['plural'] +'</a><span class="hidden">'+parentLinkSet.join(', ')+'</span>';
+                } else {
+                    // just one of this sumlev type, so add it to list
+                    return parentLinkSet;
+                }
+            })
+            // push the whole thing into the header box ... thingy
+            parentLinkContainer.html(parentLinksPrefix + parentLinkSets.join(', '));
+            $('body').trigger('glossaryUpdate', parentLinkContainer);
+        });
+}
+
+
+Glossary.init("{% url 'glossary' %}",".glossary-term");
+</script>
+{% endblock %}

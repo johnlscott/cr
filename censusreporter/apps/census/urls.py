@@ -10,7 +10,7 @@ from .utils import GEOGRAPHIES_MAP
 from .views import (HomepageView, GeographyDetailView, GeographySearchView,
     TableDetailView, TableSearchView, PlaceSearchJson, GeoSearch,
     HealthcheckView, DataView, TopicView, ExampleView, Elasticsearch,
-    MakeJSONView)
+    MakeJSONView, ProfileIFrameView)
 
 admin.autodiscover()
 
@@ -40,6 +40,13 @@ urlpatterns = patterns('',
         view    = cache_page(STANDARD_CACHE_TIME)(GeographySearchView.as_view()),
         kwargs  = {},
         name    = 'geography_search',
+    ),
+
+    url(
+        regex   = '^profile-iframe/(?P<fragment>[a-zA-Z0-9\-]+)/$',
+        view    = cache_page(STANDARD_CACHE_TIME)(ProfileIFrameView.as_view()),
+        kwargs  = {},
+        name    = 'profile_iframe',
     ),
 
     url(

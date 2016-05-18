@@ -729,13 +729,6 @@ function Chart(options) {
                 .text("Show data")
                 .on("click", chart.toggleDataDrawer);
             
-        chart.actionLinks.append("span").text("/");
-        
-        chart.showEmbed = chart.actionLinks
-            .append("a")
-                .classed("chart-show-embed", true)
-                .text("Embed")
-                .on("click", chart.showEmbedCode);
     }
     
     chart.fillEmbedCode = function(textarea, align) {

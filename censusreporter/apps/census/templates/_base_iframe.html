@@ -27,32 +27,6 @@
         <![endif]-->
 
         {% block header %}
-        <header id="page-header">
-            <div id="page-header-title" class="wrapper clearfix">
-                {% if not hide_nav_tools %}
-                <i id="menu-toggle" class="fa fa-bars"></i>
-                {% endif %}
-                <a class="title" href="{% url 'homepage' %}">
-                    <img src="{{ STATIC_URL }}img/logo.png"> Census Reporter
-                </a>
-                {% if not hide_nav_tools %}
-                <div id="menu" class="tool-set clearfix">
-                    <div class="tool-group">
-                        <input name="geography_select" id="geography-select" type="text" placeholder="Start typing to profile a place..." autocomplete="off">
-                    </div>
-                    {% if not hide_nav_compare %}
-                    <span class="separator">or</span>
-                    <div class="tool-group">
-                        <a class="button" href="{% url 'table_search' %}">
-                            <i class="fa fa-chevron-circle-right"></i>
-                            Search for data
-                        </a>
-                    </div>
-                    {% endif %}
-                </div>
-                {% endif %}
-            </div>
-        </header>
         {% block header_content %}{% endblock header_content %}
         {% endblock %}
 
@@ -62,36 +36,6 @@
         </div>
         {% endblock %}
         
-        <footer id="page-footer">
-            <section class="wrapper footer-container clearfix">
-                {% block footer_content %}
-                <ul class="ul-icon-list column-third">
-                    <li>
-                        <i class="fa fa-th-list"></i> <a href="{% url 'glossary' %}">Census terms &amp; definitions</a>
-                    </li>
-                    <li>
-                        <i class="fa fa-github"></i> <a href="https://github.com/censusreporter/">Census Reporter on GitHub</a>
-                    </li>
-                </ul>
-                <ul class="ul-icon-list column-third">
-                    <li>
-                        <i class="fa fa-comments"></i> <a href="https://censusreporter.uservoice.com/">Help &amp; feedback</a>
-                    </li>
-                    <li>
-                        <i class="fa fa-twitter"></i> <a href="http://twitter.com/CensusReporter">@CensusReporter</a>
-                    </li>
-                </ul>
-                <ul class="ul-icon-list column-third">
-                    <li>
-                        <i class="fa fa-envelope"></i> <a href="mailto:irecensusreporter@gmail.com">Email us</a>
-                    </li>
-                    <li>
-                        <i class="fa fa-tumblr"></i> <a href="http://censusreporter.tumblr.com">Census Reporter blog</a>
-                    </li>
-                </ul>
-                {% endblock footer_content %}
-            </section>
-        </footer>
         {% endblock body %}
 
         {% block body_javascript %}

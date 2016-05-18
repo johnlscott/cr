@@ -6,7 +6,7 @@
     <ProjectGuid>{d25170d3-dc38-4395-bd43-507a8e99bf37}</ProjectGuid>
     <ProjectHome />
     <StartupFile>manage.py</StartupFile>
-    <SearchPath>C:\git\censusreporter\censusreporter;C:\git\censusreporter\censusreporter\apps</SearchPath>
+    <SearchPath>C:\git\cr\censusreporter;C:\git\cr\censusreporter\apps</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{5F0BE9CA-D677-4A4D-8806-6076C0FAAD37};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
@@ -119,6 +119,7 @@
     <Content Include="censusreporter\apps\census\templates\healthcheck.html" />
     <Content Include="censusreporter\apps\census\templates\homepage.html" />
     <Content Include="censusreporter\apps\census\templates\locate\locate.html" />
+    <Content Include="censusreporter\apps\census\templates\profile\profile_iframe.html" />
     <Content Include="censusreporter\apps\census\templates\profile\profile_detail.html" />
     <Content Include="censusreporter\apps\census\templates\profile\profile_search.html" />
     <Content Include="censusreporter\apps\census\templates\profile\_base_profile.html" />
@@ -154,6 +155,7 @@
     <Content Include="censusreporter\apps\census\templates\topics\veterans.html" />
     <Content Include="censusreporter\apps\census\templates\topics\_base_topics.html" />
     <Content Include="censusreporter\apps\census\templates\topics\_question_aside.html" />
+    <Content Include="censusreporter\apps\census\templates\_base_iframe.html" />
     <Content Include="censusreporter\apps\census\templates\_base.html" />
     <Content Include="requirements.txt" />
     <Content Include="web.config" />

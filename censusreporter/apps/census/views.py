@@ -24,7 +24,7 @@ from django.views.generic import View, TemplateView
 from .models import Geography, Table, Column, SummaryLevel
 from .utils import LazyEncoder, get_max_value, get_object_or_none,\
      SUMMARY_LEVEL_DICT, NLTK_STOPWORDS, TOPIC_FILTERS, SUMLEV_CHOICES, ACS_RELEASES
-from .profile import geo_profile, enhance_api_data
+from .profile import geo_profile, iframe_profile, enhance_api_data
 from .topics import TOPICS_MAP
 
 from boto.s3.connection import S3Connection
@@ -460,6 +460,58 @@ class GeographyDetailView(TemplateView):
 
         return page_context
 
+
+class ProfileIFrameView(TemplateView):
+    template_name = 'profile/profile_iframe.html'
+
+    def parse_fragment(self,fragment):
+        """Given a URL, return a (geoid,slug) tuple. slug may be None. GeoIDs are not tested for structure, but are simply the part of the URL before any '-' character, also allowing for the curiosity of Vermont legislative districts. (see https://github.com/censusreporter/censusreporter/issues/50)"""
+        parts = fragment.split('-',1)
+        if len(parts) == 1:
+            return (fragment,None)
+
+        geoid,slug = parts
+        if len(slug) == 1:
+            geoid = '{}-{}'.format(geoid,slug)
+            slug = None
+        else:
+            parts = slug.split('-')
+            if len(parts) > 1 and len(parts[0]) == 1:
+                geoid = '{}-{}'.format(geoid,parts[0])
+                slug = '-'.join(parts[1:])
+
+        return (geoid,slug)
+
+    def dispatch(self, *args, **kwargs):
+
+        self.geo_id, self.slug = self.parse_fragment(kwargs.get('fragment'))
+        
+        if self.slug is None:
+            # if we get nothing from the API, pass through for 404
+            pass
+
+        return super(ProfileIFrameView, self).dispatch(*args, **kwargs)
+
+    def get_geography(self, geo_id):
+        return None
+
+    def get_context_data(self, *args, **kwargs):
+        geography_id = self.geo_id
+
+        profile_data = iframe_profile(geography_id)
+
+        if profile_data:
+            profile_data = enhance_api_data(profile_data)
+            profile_data_json = SafeString(simplejson.dumps(profile_data, cls=LazyEncoder))
+        else:
+            raise Http404
+
+        page_context = {
+            'profile_data_json': profile_data_json
+        }
+        page_context.update(profile_data)
+
+        return page_context
 
 class TopicView(TemplateView):
     template_name = 'topics/topics_list.html'
