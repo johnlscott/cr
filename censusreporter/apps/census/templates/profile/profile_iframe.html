@@ -7,7 +7,8 @@
     <div class="section-container">
 
         <section class="clearfix stat-row">
-            <h2 class="header-for-columns"><a class="permalink" href="#age" id="age">Age <i class="fa fa-link"></i></a>
+            <h2 class="header-for-columns">
+                <a class="permalink" href="#age" id="age">Age <i class="fa fa-link"></i></a>
             </h2>
             <aside></aside>
             <div class="column-quarter">
@@ -22,7 +23,8 @@
     <div class="section-container">
 
         <section class="clearfix stat-row">
-            <h2><a class="permalink" href="#commute" id="commute">Transportation to work <i class="fa fa-link"></i></a>
+            <h2>
+                <a class="permalink" href="#commute" id="commute">Transportation to work <i class="fa fa-link"></i></a>
             </h2>
             <aside>
             </aside>
@@ -37,7 +39,8 @@
     <div class="section-container">
 
         <section class="clearfix stat-row">
-            <h2><a class="permalink" href="#housing-occupancy" id="housing-occupancy">Units &amp; Occupancy <i class="fa fa-link"></i></a>
+            <h2>
+                <a class="permalink" href="#housing-occupancy" id="housing-occupancy">Units &amp; Occupancy <i class="fa fa-link"></i></a>
             </h2>
             <aside>
             </aside>
@@ -53,7 +56,8 @@
         </section>
 
         <section class="clearfix stat-row">
-            <h2><a class="permalink" href="#geographical-mobility" id="geographical-mobility">Geographical mobility <i class="fa fa-link"></i></a>
+            <h2>
+                <a class="permalink" href="#geographical-mobility" id="geographical-mobility">Geographical mobility <i class="fa fa-link"></i></a>
             </h2>
             <aside>
             </aside>
@@ -68,7 +72,8 @@
     <div class="section-container">
 
         <section class="clearfix stat-row">
-            <h2><a class="permalink" href="#veteran-status" id="veteran-status">Veteran status <i class="fa fa-link"></i></a>
+            <h2>
+                <a class="permalink" href="#veteran-status" id="veteran-status">Veteran status <i class="fa fa-link"></i></a>
             </h2>
             <aside>
             </aside>
@@ -93,166 +98,200 @@
 {% block body_javascript_extra %}{{ block.super }}
 <script src="{{ STATIC_URL }}js/charts.js"></script>
 <script type="text/javascript">
+
+    var hostWindow = null;
+
+    var sendHeightMessage = function() {
+        if (! hostWindow) return;
+
+        var $demographics = $('#demographics');
+        var height = $demographics.height();
+        var j = { height: height };
+        var message = JSON.stringify(j);
+        hostWindow.postMessage(message, '*');
+    };
+
+    var onMessage = function(e) {
+        var event = e.originalEvent;
+        var command = event.data;
+
+        if (command === 'register') {
+
+            hostWindow = event.source;
+            hostWindow.postMessage('register-ok', '*');
+
+        } else if (command === 'get-height') {
+
+            setTimeout(sendHeightMessage, 163);
+        }
+    };
+
+    $(window).on('message', onMessage);
+    $(window).on('resize', function() {
+        sendHeightMessage();
+    });
+
+</script>
+<script type="text/javascript">
 // Allow Ajax POST requests to bypass Django's CSRF check
 // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-var csrftoken = '{{ csrf_token }}';
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
+    var csrftoken = '{{ csrf_token }}';
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
-});
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 
 
 // Create all the charts
-var Charts = {},
-    chartContainers = $('[id^=chart-]'),
-    defaultDataRelease = '{{ geography.census_release }}',
-    releases = [defaultDataRelease],
-    profileData = {{ profile_data_json }};
+    var Charts = {},
+        chartContainers = $('[id^=chart-]'),
+        defaultDataRelease = '{{ geography.census_release }}',
+        releases = [defaultDataRelease],
+        profileData = {{ profile_data_json }};
 
-var gracefulType = function(chartType) {
-    // convert certain chart types to more readable versions at narrow widths
-    if (browserWidth <= 640) {
-        if (chartType == 'column' || chartType == 'histogram') {
-            return 'bar'
-        } else if (chartType == 'grouped_column') {
-            return 'grouped_bar'
-        }
-    }
-    return chartType
-}
-
-var makeCharts = function() {
-    $.each(chartContainers, function(i, obj) {
-        $(obj).empty();
-        var chartID = $(this).prop('id'),
-            chartDataKey = chartID.replace('chart-','').replace('alt-',''),
-            chartDataID = chartDataKey.split('-'),
-            chartType = gracefulType(chartDataID[0]),
-            chartData = profileData[chartDataID[1]],
-            chartChartTitle = $(this).data('chart-title'),
-            chartChartShowYAxis = $(this).data('chart-show-y-axis'),
-            chartInitialSort = $(this).data('initial-sort'),
-            chartStatType = $(this).data('stat-type'),
-            chartQualifier = $(this).data('qualifier') || null,
-            geographyData = profileData['geography'];
-
-        // allow arbitrary nesting in API data structure
-        var drilldown = chartDataID.length - 1;
-        if (drilldown >= 2) {
-            for (var n = 2; n <= drilldown; n++) {
-                chartData = chartData[chartDataID[n]]
+    var gracefulType = function(chartType) {
+        // convert certain chart types to more readable versions at narrow widths
+        if (browserWidth <= 640) {
+            if (chartType == 'column' || chartType == 'histogram') {
+                return 'bar';
+            } else if (chartType === 'grouped_column') {
+                return 'grouped_bar';
             }
         }
+        return chartType;
+    };
+    var makeCharts = function() {
+        $.each(chartContainers, function(i, obj) {
+            $(obj).empty();
+            var chartID = $(this).prop('id'),
+                chartDataKey = chartID.replace('chart-', '').replace('alt-', ''),
+                chartDataID = chartDataKey.split('-'),
+                chartType = gracefulType(chartDataID[0]),
+                chartData = profileData[chartDataID[1]],
+                chartChartTitle = $(this).data('chart-title'),
+                chartChartShowYAxis = $(this).data('chart-show-y-axis'),
+                chartInitialSort = $(this).data('initial-sort'),
+                chartStatType = $(this).data('stat-type'),
+                chartQualifier = $(this).data('qualifier') || null,
+                geographyData = profileData['geography'];
 
-        // determine whether data point is from anything other
-        // than the primary ACS release for this page
-        for (var key in chartData) if (chartData.hasOwnProperty(key)) break;
-        var thisRelease = chartData[key]['acs_release'],
-            noteRelease = (thisRelease != defaultDataRelease) ? thisRelease + ' data' : null;
+            // allow arbitrary nesting in API data structure
+            var drilldown = chartDataID.length - 1;
+            if (drilldown >= 2) {
+                for (var n = 2; n <= drilldown; n++) {
+                    chartData = chartData[chartDataID[n]];
+                }
+            }
 
-        chartQualifier = Array(chartQualifier, noteRelease)
+            // determine whether data point is from anything other
+            // than the primary ACS release for this page
+            for (var key in chartData) if (chartData.hasOwnProperty(key)) break;
+            var thisRelease = chartData[key]['acs_release'],
+                noteRelease = (thisRelease != defaultDataRelease) ? thisRelease + ' data' : null;
+
+            chartQualifier = Array(chartQualifier, noteRelease)
                 .filter(function(n) { return n }).join('; ');
 
-        var chartstuff = {
-            chartContainer: chartID,
-            chartDataKey: chartDataKey,
-            chartType: chartType,
-            chartHeight: 160,
-            chartData: chartData,
-            chartQualifier: chartQualifier,
-            chartChartTitle: chartChartTitle,
-            chartInitialSort: chartInitialSort,
-            chartStatType: chartStatType,
-            geographyData: geographyData
-        }
-        try {
-            Charts[i] = Chart(chartstuff);
-        } catch(e) {
-            console.log("Error making chart " + chartID)
-            console.log(chartstuff);
-        }
+            var chartstuff = {
+                chartContainer: chartID,
+                chartDataKey: chartDataKey,
+                chartType: chartType,
+                chartHeight: 160,
+                chartData: chartData,
+                chartQualifier: chartQualifier,
+                chartChartTitle: chartChartTitle,
+                chartInitialSort: chartInitialSort,
+                chartStatType: chartStatType,
+                geographyData: geographyData
+            };
+            try {
+                Charts[i] = Chart(chartstuff);
+            } catch (e) {
+                console.log("Error making chart " + chartID);
+                console.log(chartstuff);
+            }
 
-    });
-}
-makeCharts();
+        });
+    };
+    makeCharts();
 
 // listen for resize, redraw charts to new dimensions
-var lazyRedrawCharts = _.debounce(function() {
-    window.browserWidth = document.documentElement.clientWidth;
-    window.browserHeight = document.documentElement.clientHeight;
-    makeCharts();
-}, 50);
-$(window).resize(lazyRedrawCharts);
+    var lazyRedrawCharts = _.debounce(function() {
+        window.browserWidth = document.documentElement.clientWidth;
+        window.browserHeight = document.documentElement.clientHeight;
+        makeCharts();
+    }, 50);
+    $(window).resize(lazyRedrawCharts);
 
 
 // Enable the single-table topic picker
-var thisSumlev = '{{ geography.this.sumlevel }}',
-    thisGeoShortName = '{{ geography.this.short_name }}',
-    thisGeoID = '{{ geography.this.full_geoid }}',
-    placeGeoID = '{{ geography.parents.place.full_geoid }}',
-    CBSAGeoID = '{{ geography.parents.CBSA.full_geoid }}',
-    countyGeoID = '{{ geography.parents.county.full_geoid }}',
-    stateGeoID = '{{ geography.parents.state.full_geoid }}',
-    nationGeoID = '{{ geography.parents.nation.full_geoid }}';
+    var thisSumlev = '{{ geography.this.sumlevel }}',
+        thisGeoShortName = '{{ geography.this.short_name }}',
+        thisGeoID = '{{ geography.this.full_geoid }}',
+        placeGeoID = '{{ geography.parents.place.full_geoid }}',
+        CBSAGeoID = '{{ geography.parents.CBSA.full_geoid }}',
+        countyGeoID = '{{ geography.parents.county.full_geoid }}',
+        stateGeoID = '{{ geography.parents.state.full_geoid }}',
+        nationGeoID = '{{ geography.parents.nation.full_geoid }}';
 
 // Update the header's list of parent geographies
-var parentLinkContainer = $('#header-box .caption'),
-    parentLinksPrefix = '<span class="glossary-term">{{ geography.this.sumlevel_name|capfirst }}</span> in: ',
-    parentGeoAPI = CR_API_URL + '/1.0/geo/tiger2014/' + thisGeoID + '/parents',
-    tilesGeoAPI = 'http://embed.censusreporter.org/1.0/geo/tiger2014/tiles/' + thisSumlev + '/{z}/{x}/{y}.geojson';
+    var parentLinkContainer = $('#header-box .caption'),
+        parentLinksPrefix = '<span class="glossary-term">{{ geography.this.sumlevel_name|capfirst }}</span> in: ',
+        parentGeoAPI = CR_API_URL + '/1.0/geo/tiger2014/' + thisGeoID + '/parents',
+        tilesGeoAPI = 'http://embed.censusreporter.org/1.0/geo/tiger2014/tiles/' + thisSumlev + '/{z}/{x}/{y}.geojson';
 
 // for touch devices, still allow context toggle
-$('.stat-row').on('click', '.stat', function() {
-    $(this).find('.context').toggle();
-})
-
-if (!!parentLinkContainer) {
-    // set up the listener for trigger to reveal hidden groups
-    $('#header-box').on('click', '.link-reveal', function() {
-        $(this).hide().next('.hidden').show();
-        return false;
+    $('.stat-row').on('click', '.stat', function() {
+        $(this).find('.context').toggle();
     });
-
-    // hit the /parents API endpoint
-    $.getJSON(parentGeoAPI)
-        .done(function(results) {
-            // filter out 'this' from the parents
-            var parents = _.reject(results['parents'], function(p) {
-                return p.relation === 'this';
-            });
-            // list of unique parent sumlev types, maintaining order
-            var parentRelations = _.uniq(_.pluck(parents, 'sumlevel'));
-            // collect parents into individual sumlev groups
-            var parentGroups = _.groupBy(parents, function(d) {
-                return d.sumlevel;
-            });
-            // for each parent sumlev type ...
-            var parentLinkSets = _.map(parentRelations, function(r) {
-                // ... compile a set of links to individual profile pages
-                var parentLinkSet = _.map(parentGroups[r], function(v, k) {
-                    return '<a href="/profiles/' + v.geoid + '-' + slugify(v.display_name) + '/">' + v.display_name + '</a>';
-                });
-                var numParents = parentLinkSet.length;
-                // if more than one of a sumlev type, group behind reveal link
-                if (numParents > 1) {
-                    return '<a href="#" class="link-reveal">'+numParents+' '+ sumlevMap[r]['plural'] +'</a><span class="hidden">'+parentLinkSet.join(', ')+'</span>';
-                } else {
-                    // just one of this sumlev type, so add it to list
-                    return parentLinkSet;
-                }
-            })
-            // push the whole thing into the header box ... thingy
-            parentLinkContainer.html(parentLinksPrefix + parentLinkSets.join(', '));
-            $('body').trigger('glossaryUpdate', parentLinkContainer);
+    if (!!parentLinkContainer) {
+        // set up the listener for trigger to reveal hidden groups
+        $('#header-box').on('click', '.link-reveal', function() {
+            $(this).hide().next('.hidden').show();
+            return false;
         });
-}
+
+        // hit the /parents API endpoint
+        $.getJSON(parentGeoAPI)
+            .done(function(results) {
+                // filter out 'this' from the parents
+                var parents = _.reject(results['parents'], function(p) {
+                    return p.relation === 'this';
+                });
+                // list of unique parent sumlev types, maintaining order
+                var parentRelations = _.uniq(_.pluck(parents, 'sumlevel'));
+                // collect parents into individual sumlev groups
+                var parentGroups = _.groupBy(parents, function(d) {
+                    return d.sumlevel;
+                });
+                // for each parent sumlev type ...
+                var parentLinkSets = _.map(parentRelations, function(r) {
+                    // ... compile a set of links to individual profile pages
+                    var parentLinkSet = _.map(parentGroups[r], function(v, k) {
+                        return '<a href="/profiles/' + v.geoid + '-' + slugify(v.display_name) + '/">' + v.display_name + '</a>';
+                    });
+                    var numParents = parentLinkSet.length;
+                    // if more than one of a sumlev type, group behind reveal link
+                    if (numParents > 1) {
+                        return '<a href="#" class="link-reveal">' + numParents + ' ' + sumlevMap[r]['plural'] + '</a><span class="hidden">' + parentLinkSet.join(', ') + '</span>';
+                    } else {
+                        // just one of this sumlev type, so add it to list
+                        return parentLinkSet;
+                    }
+                }); // push the whole thing into the header box ... thingy
+                parentLinkContainer.html(parentLinksPrefix + parentLinkSets.join(', '));
+                $('body').trigger('glossaryUpdate', parentLinkContainer);
+            });
+    }
 
 
 </script>
