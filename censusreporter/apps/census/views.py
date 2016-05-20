@@ -461,8 +461,43 @@ class GeographyDetailView(TemplateView):
         return page_context
 
 
+class ProfileIFrameDataCache():
+    
+    data = {'key': 'value'}
+    instance = None
+    limit = 1024
+
+    def __init__(self):
+        if self.instance is not None:
+            raise ValueError("An instantiation already exists!")
+
+        self.data.clear()
+       
+    @classmethod
+    def get_instance(cls):
+        if cls.instance is None:
+            cls.instance = ProfileIFrameDataCache()
+   
+        return cls.instance
+
+    def get(self,key):
+        if not key: 
+            return None
+
+        if self.data.has_key(key):
+            return self.data[key]
+       
+        return None
+  
+    def set(self,key,value):
+        if len(self.data) >= self.limit:
+            self.data.clear()
+
+        self.data[key] = value
+
 class ProfileIFrameView(TemplateView):
     template_name = 'profile/profile_iframe.html'
+    data_cache =  ProfileIFrameDataCache.get_instance()
 
     def parse_fragment(self,fragment):
         """Given a URL, return a (geoid,slug) tuple. slug may be None. GeoIDs are not tested for structure, but are simply the part of the URL before any '-' character, also allowing for the curiosity of Vermont legislative districts. (see https://github.com/censusreporter/censusreporter/issues/50)"""
@@ -498,7 +533,11 @@ class ProfileIFrameView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         geography_id = self.geo_id
 
-        profile_data = iframe_profile(geography_id)
+        profile_data = self.data_cache.get(geography_id)
+        if profile_data is None:
+            profile_data = iframe_profile(geography_id)
+            if not profile_data is None:
+                self.data_cache.set(geography_id, profile_data)
 
         if profile_data:
             profile_data = enhance_api_data(profile_data)
