@@ -2,7 +2,6 @@
 #git clone https://github.com/johnlscott/cr.git /home/ubuntu/cr
 apt-get update
 apt-get install -y gunicorn nginx python-dev libxml2 libxslt1-dev git-core python-pip
-cd /home/ubuntu
 cd /home/ubuntu/cr
 pip install -r requirements.txt
 pip install futures
