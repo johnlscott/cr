@@ -29,8 +29,8 @@ RestartSec=3
 WantedBy=multi-user.target
 EOL
 
-systemctl daemon-reload
 systemctl enable gunicorn.service
+systemctl daemon-reload
 systemctl start gunicorn.service
 systemctl status gunicorn.service
 
