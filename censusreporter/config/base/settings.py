@@ -30,7 +30,7 @@ INSTALLED_APPS = (
 )
 
 ALLOWED_HOSTS = []
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Los_Angeles'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = False
@@ -109,7 +109,7 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-API_URL = 'http://api.censusreporter.org'
+API_URL = 'https://api.censusreporter.org'
 
 import raven
 

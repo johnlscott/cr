@@ -5,11 +5,12 @@ TEMPLATE_DEBUG = DEBUG
 ROOT_URLCONF = 'config.prod.urls'
 WSGI_APPLICATION = "config.prod.wsgi.application"
 
-
 ALLOWED_HOSTS = [
-    '.censusreporter.org',
+    '.jlscloud.net',
+    '.jlscloud.org',
+    '.jlscloud.co',
     '.compute-1.amazonaws.com',  # allows viewing of instances directly
-    'cr-prod-409865157.us-east-1.elb.amazonaws.com',  # from the load balancer
+    'ElasticLo-ElasticL-FGTIONT2WI4F-420622575.us-west-2.elb.amazonaws.com',  # from the load balancer
 ]
 
 # From https://forums.aws.amazon.com/thread.jspa?messageID=423533:
@@ -26,8 +27,11 @@ if EC2_PRIVATE_IP:
     ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
 
 CACHES = {
+    #'default': {
+    #    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    #    'LOCATION': 'localhost:11211',
+    #}
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'localhost:11211',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
