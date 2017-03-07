@@ -3,13 +3,13 @@ from config.base.settings import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ROOT_URLCONF = 'config.prod.urls'
-WSGI_APPLICATION = "config.prod.wsgi.application"
-
+WSGI_APPLICATION = 'config.prod.wsgi.application'
+SECURE_PROXY_SSL_HEADER  = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = [
     '.jlscloud.net',
     '.jlscloud.org',
     '.jlscloud.co',
-    '.compute-1.amazonaws.com',  # allows viewing of instances directly
+    '.us-west-2.compute.amazonaws.com',  # allows viewing of instances directly
     'ElasticLo-ElasticL-FGTIONT2WI4F-420622575.us-west-2.elb.amazonaws.com',  # from the load balancer
 ]
 
