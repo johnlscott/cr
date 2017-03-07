@@ -36,7 +36,7 @@ systemctl status gunicorn.service
 cat > /etc/nginx/sites-available/censusreporter <<EOL
 server {
     listen 80;
-    server_name census.jlscloud.net;
+    server_name censusreporter.jlscloud.net;
 
     location / {
         include proxy_params;
