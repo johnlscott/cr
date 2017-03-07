@@ -27,11 +27,17 @@ if EC2_PRIVATE_IP:
     ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
 
 CACHES = {
+    # django's local in-memory cache
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
     #'default': {
     #    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
     #    'LOCATION': 'localhost:11211',
     #}
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
+
+    #'default': {
+    #    'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    #}
 }
