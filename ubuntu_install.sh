@@ -52,7 +52,16 @@ server {
 }
 EOL
 
+cat > /etc/nginx/sites-available/johnlscott <<EOL
+server {
+    listen 80;
+    server_name johnlscott.com;
+    return 301 $scheme://www.johnlscott.com$request_uri;
+}
+EOL
+
 ln -s /etc/nginx/sites-available/censusreporter /etc/nginx/sites-enabled/censusreporter
+ln -s /etc/nginx/sites-available/johnlscott /etc/nginx/sites-enabled/johnlscott
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 systemctl restart nginx
