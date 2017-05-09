@@ -47,8 +47,25 @@ server {
         alias /home/ubuntu/cr/censusreporter/apps/census/static;
     }
 
-    access_log /var/log/nginx/census_reporter.access.log;
-    error_log /var/log/nginx/census_reporters.error.log;
+    access_log /var/log/nginx/censusreporter-jlscloud-net.access.log;
+    error_log /var/log/nginx/censusreporter-jlscloud-net.error.log;
+}
+
+server {
+    listen 80;
+    server_name censusreporter.johnlscott.com;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/cr/censusreporter.sock;
+    }
+
+    location /static {
+        alias /home/ubuntu/cr/censusreporter/apps/census/static;
+    }
+
+    access_log /var/log/nginx/censusreporter-johnlscott-com.access.log;
+    error_log /var/log/nginx/censusreporter-johnlscott-com.error.log;
 }
 EOL
 
