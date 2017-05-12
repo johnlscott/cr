@@ -36,7 +36,8 @@ systemctl status gunicorn.service
 cat > /etc/nginx/sites-available/censusreporter <<EOL
 server {
     listen 80;
-    server_name censusreporter.jlscloud.net;
+    listen 8080;
+    server_name censusreporter.jlscloud.net default_server;
 
     location / {
         include proxy_params;
@@ -53,32 +54,19 @@ server {
 
 server {
     listen 80;
-    server_name censusreporter.johnlscott.com;
-
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/home/ubuntu/cr/censusreporter.sock;
-    }
-
-    location /static {
-        alias /home/ubuntu/cr/censusreporter/apps/census/static;
-    }
-
-    access_log /var/log/nginx/censusreporter-johnlscott-com.access.log;
-    error_log /var/log/nginx/censusreporter-johnlscott-com.error.log;
-}
-EOL
-
-cat > /etc/nginx/sites-available/johnlscott <<EOL
-server {
-    listen 80;
     server_name johnlscott.com;
     return 301 $scheme://www.johnlscott.com$request_uri;
 }
+
+server {
+    listen 80;
+    server_name ~^(?<domain>.+)$;
+    return 301 http://www.$domain$request_uri;
+}
+
 EOL
 
 ln -s /etc/nginx/sites-available/censusreporter /etc/nginx/sites-enabled/censusreporter
-ln -s /etc/nginx/sites-available/johnlscott /etc/nginx/sites-enabled/johnlscott
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 systemctl restart nginx
