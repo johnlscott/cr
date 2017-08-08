@@ -55,7 +55,13 @@ server {
 server {
     listen 80;
     server_name johnlscott.com;
-    return 301 $scheme://www.johnlscott.com$request_uri;
+    return 301 https://www.johnlscott.com$request_uri;
+}
+
+server {
+    listen 80;
+    server_name jlsapp.com;
+    return 301 http://www.jlsapp.com$request_uri;
 }
 
 server {
